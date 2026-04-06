@@ -208,6 +208,7 @@ def test_init(test_case, monkeypatch):
                 "model_format_name": "pytorch",
                 "model_format_version": "1.0",
                 "version": "v1",
+                "author": "test-author",
             },
             expected_output={
                 "storage_key": None,
