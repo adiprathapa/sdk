@@ -21,14 +21,25 @@ SHELL = /usr/bin/env bash -o pipefail
 PROJECT_DIR := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
 VENV_DIR := $(PROJECT_DIR)/.venv
 
-# Setting SED for compatibility with macos
+# Setting SED for compatibility with macOS
 ifeq ($(shell command -v gsed 2>/dev/null),)
     SED ?= $(shell command -v sed)
 else
     SED ?= $(shell command -v gsed)
 endif
-ifeq ($(shell ${SED} --version 2>&1 | grep -q GNU; echo $$?),1)
-    $(error !!! GNU sed is required. If on OS X, use 'brew install gnu-sed'.)
+
+# Robust GNU sed check that works in CI environments
+SED_VERSION_CHECK := $(shell ${SED} --version 2>/dev/null | head -1 | grep -c "GNU sed" 2>/dev/null || echo 0)
+ifeq ($(SED_VERSION_CHECK),0)
+    # Check if we're in CI or if this is macOS
+    UNAME_S := $(shell uname -s 2>/dev/null)
+    ifdef CI
+        $(warning Warning: GNU sed not detected in CI environment, but proceeding anyway)
+    else ifeq ($(UNAME_S),Darwin)
+        $(error !!! GNU sed is required on macOS. Install with: brew install gnu-sed)
+    else
+        $(error !!! GNU sed is required. Current sed: $(shell which ${SED} 2>/dev/null))
+    endif
 endif
 
 ##@ General
