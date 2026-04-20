@@ -82,9 +82,6 @@ class ModelRegistryClient:
                 "  pip install 'kubeflow[hub]'\n"
             ) from e
 
-        if author is None:
-            raise ValueError("author is required and cannot be None")
-
         is_http = base_url.startswith("http://")
         if is_secure is None:
             is_secure = not is_http
@@ -94,7 +91,7 @@ class ModelRegistryClient:
         self._registry = ModelRegistry(
             server_address=base_url,
             port=port,
-            author=author,
+            author=author,  # type: ignore[arg-type]
             is_secure=is_secure,
             user_token=user_token,
             custom_ca=custom_ca,
@@ -145,23 +142,13 @@ class ModelRegistryClient:
 
         Returns:
             Registered model.
-
-        Raises:
-            ValueError: If required fields are None.
         """
-        if model_format_name is None:
-            raise ValueError("model_format_name is required and cannot be None")
-        if model_format_version is None:
-            raise ValueError("model_format_version is required and cannot be None")
-        if author is None:
-            raise ValueError("author is required and cannot be None")
-
         storage = storage_config or StorageConfig()
         return self._registry.register_model(
             name=name,
             uri=uri,
-            model_format_name=model_format_name,
-            model_format_version=model_format_version,
+            model_format_name=model_format_name,  # type: ignore[arg-type]
+            model_format_version=model_format_version,  # type: ignore[arg-type]
             version=version,
             author=author,
             owner=owner,
