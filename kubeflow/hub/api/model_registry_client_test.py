@@ -222,7 +222,10 @@ def test_init(test_case, monkeypatch):
             config={
                 "name": "test",
                 "uri": "s3://bucket/model",
+                "model_format_name": "pytorch",
+                "model_format_version": "1.0",
                 "version": "v1",
+                "author": "test-author",
                 "storage_config_kwargs": {
                     "storage_key": "my-s3-secret",
                     "storage_path": "models/v1",
@@ -241,7 +244,10 @@ def test_init(test_case, monkeypatch):
             config={
                 "name": "test",
                 "uri": "s3://bucket/model",
+                "model_format_name": "pytorch",
+                "model_format_version": "1.0",
                 "version": "v1",
+                "author": "test-author",
                 "storage_config_kwargs": {"storage_key": "my-s3-secret"},
             },
             expected_output={
@@ -256,7 +262,10 @@ def test_init(test_case, monkeypatch):
             config={
                 "name": "test",
                 "uri": "s3://bucket/model",
+                "model_format_name": "pytorch",
+                "model_format_version": "1.0",
                 "version": "v1",
+                "author": "test-author",
                 "storage_config_kwargs": {"service_account_name": "model-sa"},
             },
             expected_output={
